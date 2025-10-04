@@ -2,9 +2,26 @@
 
 A powerful toolkit for generating starter projects for DaVinci Resolve extension development across multiple platforms and development paths.
 
+## 🆕 **NEW: AI-Powered Resolve Controller** 🤖
+
+**Control DaVinci Resolve with natural language!** Check out the new [`resolve-ai-assistant`](resolve-ai-assistant/) - an AI-powered CLI that lets you automate Fusion node creation, timeline management, and project operations using conversational commands.
+
+```powershell
+cd resolve-ai-assistant
+poetry run resolve-ai
+
+You: Create a lower-third with title "John Doe" and subtitle "CEO"
+AI: ✓ Created complete Fusion composition with 7 nodes
+```
+
+[→ Get Started with AI Assistant](resolve-ai-assistant/QUICKSTART.md)
+
+---
+
 ## Overview
 
 This project provides automated scaffolding tools to kickstart development of:
+- **🤖 AI Assistant** (NEW!) - Control Resolve with natural language and automate Fusion workflows
 - **Scripting Extensions** (Python) - Automate workflows using DaVinciResolveScript API
 - **Fusion Effects** (Lua) - Create custom visual effects and tools for Fusion
 - **OpenFX Plugins** (C++) - Develop industry-standard visual effects plugins

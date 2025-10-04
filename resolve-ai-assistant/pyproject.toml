@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "resolve-ai-assistant"
+version = "0.1.0"
+description = "AI-powered DaVinci Resolve automation assistant with Fusion node control"
+authors = ["Satyam Saxena <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "resolve_ai", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.54.0"
+python-dotenv = "^1.0.0"
+rich = "^13.7.0"
+pydantic = "^2.9.0"
+langchain = "^0.3.0"
+langchain-openai = "^0.2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+flake8 = "^7.1.0"
+mypy = "^1.11.0"
+pytest = "^8.3.0"
+
+[tool.poetry.scripts]
+resolve-ai = "resolve_ai.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
