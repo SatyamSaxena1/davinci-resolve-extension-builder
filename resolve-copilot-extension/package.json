@@ -1,0 +1,144 @@
+{
+  "name": "resolve-copilot-assistant",
+  "displayName": "DaVinci Resolve AI Assistant",
+  "description": "GitHub Copilot integration for AI-powered DaVinci Resolve automation with Fusion node control",
+  "version": "0.1.0",
+  "publisher": "SatyamSaxena",
+  "author": "Satyam Saxena",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SatyamSaxena1/davinci-resolve-extension-builder"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Other"
+  ],
+  "keywords": [
+    "davinci resolve",
+    "fusion",
+    "video editing",
+    "ai assistant",
+    "copilot"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "resolve.assistant",
+        "name": "resolve",
+        "description": "AI assistant for DaVinci Resolve automation",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "create",
+            "description": "Create Fusion effects and compositions"
+          },
+          {
+            "name": "modify",
+            "description": "Modify existing nodes and parameters"
+          },
+          {
+            "name": "preview",
+            "description": "Play preview on DaVinci video output"
+          },
+          {
+            "name": "context",
+            "description": "Show current composition context"
+          },
+          {
+            "name": "clear",
+            "description": "Clear all nodes in composition"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "resolve.preview",
+        "title": "Resolve: Play Preview (20s)"
+      },
+      {
+        "command": "resolve.getContext",
+        "title": "Resolve: Get Composition Context"
+      },
+      {
+        "command": "resolve.setRenderRange",
+        "title": "Resolve: Set Render Range"
+      },
+      {
+        "command": "resolve.clearComposition",
+        "title": "Resolve: Clear Fusion Composition"
+      },
+      {
+        "command": "resolve.openChat",
+        "title": "Resolve: Open AI Assistant Chat"
+      }
+    ],
+    "configuration": {
+      "title": "Resolve AI Assistant",
+      "properties": {
+        "resolve.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to Python executable with resolve-ai installed (leave empty for auto-detect)"
+        },
+        "resolve.projectPath": {
+          "type": "string",
+          "default": "${workspaceFolder}/resolve-ai-assistant",
+          "description": "Path to resolve-ai-assistant project"
+        },
+        "resolve.maxRenderSeconds": {
+          "type": "number",
+          "default": 20,
+          "description": "Maximum render duration in seconds (for rapid iteration)"
+        },
+        "resolve.autoPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically play preview after changes"
+        },
+        "resolve.requirePermission": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask for permission before executing actions (dog behavior mode)"
+        },
+        "resolve.showProgress": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show progress indicators for steps"
+        },
+        "resolve.verboseLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging for debugging"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {}
+}
