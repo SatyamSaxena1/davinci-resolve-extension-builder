@@ -17,28 +17,20 @@ for file in "${files[@]}"; do
   fi
 done
 
-# Check if GitHub CLI is available
+# Check if bash is available
 echo ""
-echo "🔧 Checking dependencies..."
-if command -v gh >/dev/null 2>&1; then
-  echo "✅ GitHub CLI found"
-  
-  # Check if user is authenticated
-  if gh auth status >/dev/null 2>&1; then
-    echo "✅ GitHub CLI authenticated"
-  else
-    echo "⚠️  GitHub CLI not authenticated. Run 'gh auth login'"
-  fi
-  
-  # Check if copilot extension is available
-  if gh extension list 2>/dev/null | grep -q "github/gh-copilot"; then
-    echo "✅ GitHub Copilot extension installed"
-  else
-    echo "⚠️  GitHub Copilot extension not installed. Run 'gh extension install github/gh-copilot'"
-  fi
+echo "🔧 Checking shell compatibility..."
+if command -v bash >/dev/null 2>&1; then
+  echo "✅ Bash shell found"
 else
-  echo "❌ GitHub CLI not found. Install from https://cli.github.com/"
-  exit 1
+  echo "⚠️  Bash shell not found (Linux/macOS compatibility may be limited)"
+fi
+
+# Check if PowerShell is available
+if command -v pwsh >/dev/null 2>&1 || command -v powershell >/dev/null 2>&1; then
+  echo "✅ PowerShell found"
+else
+  echo "⚠️  PowerShell not found (Windows compatibility may be limited)"
 fi
 
 echo ""

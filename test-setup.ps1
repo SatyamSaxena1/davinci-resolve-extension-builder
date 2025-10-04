@@ -21,29 +21,14 @@ if (-not $allFilesExist) {
     exit 1
 }
 
-# Check if GitHub CLI is available
-Write-Host "`n🔧 Checking dependencies..." -ForegroundColor Yellow
-if (Get-Command gh -ErrorAction SilentlyContinue) {
-    Write-Host "✅ GitHub CLI found" -ForegroundColor Green
-    
-    # Check if user is authenticated
-    try {
-        gh auth status 2>$null | Out-Null
-        Write-Host "✅ GitHub CLI authenticated" -ForegroundColor Green
-    } catch {
-        Write-Host "⚠️  GitHub CLI not authenticated. Run 'gh auth login'" -ForegroundColor Yellow
-    }
-    
-    # Check if copilot extension is available
-    $extensions = gh extension list 2>$null
-    if ($extensions -match "github/gh-copilot") {
-        Write-Host "✅ GitHub Copilot extension installed" -ForegroundColor Green
-    } else {
-        Write-Host "⚠️  GitHub Copilot extension not installed. Run 'gh extension install github/gh-copilot'" -ForegroundColor Yellow
-    }
+# Check platform compatibility
+Write-Host "`n🔧 Checking platform compatibility..." -ForegroundColor Yellow
+Write-Host "✅ PowerShell available" -ForegroundColor Green
+
+if (Get-Command bash -ErrorAction SilentlyContinue) {
+    Write-Host "✅ Bash shell found (cross-platform compatibility)" -ForegroundColor Green
 } else {
-    Write-Host "❌ GitHub CLI not found. Install from https://cli.github.com/" -ForegroundColor Red
-    exit 1
+    Write-Host "⚠️  Bash shell not found (Linux/macOS scripts may not work)" -ForegroundColor Yellow
 }
 
 Write-Host "`n📋 Available extension types:" -ForegroundColor Cyan

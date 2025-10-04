@@ -12,21 +12,9 @@ This project provides automated scaffolding tools to kickstart development of:
 
 ## Prerequisites
 
-- [GitHub CLI](https://cli.github.com/) (`gh`)
-- GitHub Copilot extension for GitHub CLI
+- Bash shell (Linux/macOS) or PowerShell (Windows)
 - DaVinci Resolve (for testing generated extensions)
-
-### Installation of Prerequisites
-
-1. **Install GitHub CLI**:
-   - Windows: Download from https://cli.github.com/
-   - macOS: `brew install gh`
-   - Linux: Follow instructions at https://github.com/cli/cli/blob/trunk/docs/install_linux.md
-
-2. **Install GitHub Copilot extension**:
-   ```bash
-   gh extension install github/gh-copilot
-   ```
+- Development tools for your platform (Python, C++ compiler, etc.)
 
 ## Quick Start
 
@@ -74,19 +62,15 @@ This project provides automated scaffolding tools to kickstart development of:
 - `TARGET`: Extension type - `scripting`, `fusion`, `ofx`, or `dctl` (default: `scripting`)
 - `OUT_DIR`: Output directory for generated project (default: `resolve-addon`)
 
-**Environment Variables:**
-- `MODEL_FLAG`: Specify Copilot model (e.g., `MODEL_FLAG="--model gpt-4o-mini"`)
-
 ### Windows Script (`generate-resolve-addon.ps1`)
 
 ```powershell
-.\generate-resolve-addon.ps1 [-PlanFile <path>] [-Target <type>] [-OutDir <dir>] [-ModelFlag <flags>]
+.\generate-resolve-addon.ps1 [-PlanFile <path>] [-Target <type>] [-OutDir <dir>]
 ```
 
 - `-PlanFile`: Path to plan markdown file (default: `PLAN.md`)
 - `-Target`: Extension type - `scripting`, `fusion`, `ofx`, or `dctl` (default: `scripting`)
 - `-OutDir`: Output directory for generated project (default: `resolve-addon`)
-- `-ModelFlag`: Specify Copilot model flags (e.g., `--model gpt-4o-mini`)
 
 ## Extension Types
 
@@ -130,24 +114,15 @@ Modify `PLAN.md` to customize the generated projects:
 
 ## Troubleshooting
 
-### GitHub CLI Issues
-```bash
-# Check if gh is installed and authenticated
-gh auth status
+### Build Issues
+- Ensure you have the required development tools for your platform
+- Check that DaVinci Resolve is properly installed
+- Verify file paths and permissions
 
-# Login if needed
-gh auth login
-```
-
-### Copilot Extension Issues
-```bash
-# Reinstall copilot extension
-gh extension remove github/gh-copilot
-gh extension install github/gh-copilot
-```
-
-### Base64 Decode Errors
-If you encounter base64 decode errors, check the `copilot_raw.txt` file that gets generated for debugging the raw response from Copilot.
+### Installation Issues
+- Make sure DaVinci Resolve is closed when installing extensions
+- Check that the target directories exist and are writable
+- Verify that extensions are being installed to the correct locations
 
 ## Contributing
 
