@@ -74,6 +74,15 @@ class ResolveAIController:
                 f"Make sure Resolve is running with a project open. Error: {e}"
             )
 
+    def is_connected(self) -> bool:
+        """
+        Check if connected to DaVinci Resolve
+        
+        Returns:
+            True if connected, False otherwise
+        """
+        return self.resolve is not None and self.project is not None
+    
     def get_project_info(self) -> Dict[str, Any]:
         """Get information about current project"""
         if not self.project:

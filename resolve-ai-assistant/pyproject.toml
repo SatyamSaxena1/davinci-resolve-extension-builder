@@ -8,12 +8,11 @@ packages = [{include = "resolve_ai", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-openai = "^1.54.0"
 python-dotenv = "^1.0.0"
 rich = "^13.7.0"
-pydantic = "^2.9.0"
-langchain = "^0.3.0"
-langchain-openai = "^0.2.0"
+requests = "^2.31.0"
+websocket-client = "^1.6.0"
+pillow = "^10.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"

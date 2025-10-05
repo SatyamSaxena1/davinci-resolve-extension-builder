@@ -12,6 +12,8 @@ interface Step {
     actions: Action[];
     parameters: Record<string, any>;
     status: 'pending' | 'executing' | 'completed' | 'failed';
+    type?: 'resolve' | 'github';  // Optional type to distinguish command domains
+    githubTool?: string;  // GitHub CLI tool name if type === 'github'
 }
 
 interface Action {
@@ -146,8 +148,14 @@ export class ResolveChatParticipant {
         }
 
         try {
-            // Execute via Python backend
-            const result = await this.bridge.executeStep(step);
+            // Check if this is a GitHub CLI command
+            let result;
+            if (step.type === 'github' || this.isGitHubStep(step)) {
+                result = await this.executeGitHubStep(step, stream, token);
+            } else {
+                // Execute via Python backend (Resolve operation)
+                result = await this.bridge.executeStep(step);
+            }
 
             if (token.isCancellationRequested) return;
 
@@ -288,5 +296,80 @@ export class ResolveChatParticipant {
     // Public method for commands to get context
     async getCompositionContext(): Promise<string> {
         return await this.bridge.getContext();
+    }
+
+    // GitHub CLI integration methods
+
+    private isGitHubStep(step: Step): boolean {
+        // Check if step contains GitHub-related keywords
+        const githubKeywords = [
+            'issue', 'pr', 'pull request', 'release', 'workflow',
+            'commit', 'branch', 'github', 'repository', 'repo'
+        ];
+        const desc = step.description.toLowerCase();
+        return githubKeywords.some(keyword => desc.includes(keyword));
+    }
+
+    private async executeGitHubStep(
+        step: Step,
+        stream: vscode.ChatResponseStream,
+        token: vscode.CancellationToken
+    ): Promise<any> {
+        // Detect GitHub tool from step description or explicit githubTool property
+        const toolName = step.githubTool || this.detectGitHubTool(step.description);
+        
+        if (!toolName) {
+            throw new Error('Could not determine GitHub CLI tool from step description');
+        }
+
+        // Extract parameters from step
+        const parameters = step.parameters || {};
+
+        // Execute GitHub command
+        // Note: permission already granted since we're in executeCurrentStep
+        const result = await this.bridge.executeGitHubCommand(
+            toolName,
+            parameters,
+            true  // Permission granted
+        );
+
+        // Format GitHub-specific response
+        if (result.formatted) {
+            stream.markdown('\n```\n' + result.formatted + '\n```\n');
+        }
+
+        return result;
+    }
+
+    private detectGitHubTool(description: string): string | null {
+        const lower = description.toLowerCase();
+
+        // Issue operations
+        if (lower.includes('create issue')) return 'gh_issue_create';
+        if (lower.includes('list issue')) return 'gh_issue_list';
+        if (lower.includes('view issue') || lower.includes('show issue')) return 'gh_issue_view';
+
+        // PR operations
+        if (lower.includes('create pr') || lower.includes('create pull request')) return 'gh_pr_create';
+        if (lower.includes('list pr') || lower.includes('list pull request')) return 'gh_pr_list';
+        if (lower.includes('view pr') || lower.includes('show pr')) return 'gh_pr_view';
+        if (lower.includes('checkout pr')) return 'gh_pr_checkout';
+
+        // Workflow operations
+        if (lower.includes('list workflow')) return 'gh_workflow_list';
+        if (lower.includes('run workflow') || lower.includes('trigger workflow')) return 'gh_workflow_run';
+        if (lower.includes('list run') || lower.includes('show run')) return 'gh_run_list';
+        if (lower.includes('view run') || lower.includes('check run')) return 'gh_run_view';
+
+        // Release operations
+        if (lower.includes('create release')) return 'gh_release_create';
+        if (lower.includes('list release')) return 'gh_release_list';
+
+        // Repository operations
+        if (lower.includes('repo info') || lower.includes('repository info')) return 'gh_repo_info';
+        if (lower.includes('list branch')) return 'gh_branch_list';
+        if (lower.includes('list commit')) return 'gh_commit_list';
+
+        return null;
     }
 }

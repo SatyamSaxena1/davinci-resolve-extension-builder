@@ -224,4 +224,27 @@ export class PythonBridge {
             });
         });
     }
+
+    // GitHub CLI integration methods
+
+    async executeGitHubCommand(
+        toolName: string,
+        parameters: any,
+        permissionGranted: boolean = false
+    ): Promise<any> {
+        const command = {
+            action: 'github_execute',
+            tool_name: toolName,
+            parameters: parameters,
+            permission_granted: permissionGranted
+        };
+        return this.callPython(command);
+    }
+
+    async listGitHubTools(): Promise<any> {
+        const command = {
+            action: 'github_list_tools'
+        };
+        return this.callPython(command);
+    }
 }
